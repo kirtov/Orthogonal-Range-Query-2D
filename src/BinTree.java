@@ -3,12 +3,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class FCTree {
+public class BinTree {
     Node root;
     int leftYInd, rightYInd;
     int x1,x2,y1,y2;
 
-    public FCTree(Point[] points) {
+    public BinTree(Point[] points) {
         Point[] yPoints = Arrays.copyOf(points, points.length);
         Arrays.sort(points, (Point p1, Point p2) -> (p1.x == p2.x) ? (p1.y - p2.y) : (p1.x - p2.x));
         Arrays.sort(yPoints, (Point p1, Point p2) -> (p1.y - p2.y));
@@ -70,14 +70,16 @@ public class FCTree {
         if (curNode.p.x <= x2) {
             if (rightYInd < curNode.rLinks.length) {
                 ans = findSubTree(curNode.l, curNode.lLinks[rightYInd]);
-                rightYInd = curNode.rLinks[rightYInd];
+                if (curNode.r != null)
+                    rightYInd = Utils.binSearchByY(curNode.r.yPoints, y1, 0, curNode.r.yPoints.length);
             }
             ans.addAll(findRight(curNode.r));
             if (curNode.p.y <= y2 && curNode.p.y >= y1)
                 ans.add(curNode.p);
         } else {
             if (rightYInd < curNode.rLinks.length)
-                rightYInd = curNode.lLinks[rightYInd];
+                if (curNode.r != null)
+                    rightYInd = Utils.binSearchByY(curNode.r.yPoints, y1, 0, curNode.r.yPoints.length);
             ans.addAll(findRight(curNode.l));
         }
         return ans;
@@ -90,14 +92,16 @@ public class FCTree {
         if (curNode.p.x >= x1) {
             if (leftYInd < curNode.lLinks.length) {
                 ans.addAll(findSubTree(curNode.r, curNode.rLinks[leftYInd]));
-                leftYInd = curNode.lLinks[leftYInd];
+                if (curNode.l != null)
+                    leftYInd = Utils.binSearchByY(curNode.l.yPoints, y1, 0, curNode.l.yPoints.length);
             }
             ans.addAll(findLeft(curNode.l));
             if (curNode.p.y <= y2 && curNode.p.y >= y1)
                 ans.add(curNode.p);
         } else {
             if (leftYInd < curNode.lLinks.length)
-                leftYInd = curNode.rLinks[leftYInd];
+                if (curNode.l != null)
+                    leftYInd = Utils.binSearchByY(curNode.l.yPoints, y1, 0, curNode.l.yPoints.length);
             ans.addAll(findLeft(curNode.r));
         }
         return ans;
@@ -110,7 +114,7 @@ public class FCTree {
     boolean nodeIsInBound(Node curNode) {
         return (curNode.p.y <= y2 && curNode.p.y >= y1 && curNode.p.x <= x2 && curNode.p.x >= x1);
     }
-    
+
     public Point[] getPointsByRect(int x1, int y1, int w, int h) {
         this.x1 = x1;
         this.y1 = y1;

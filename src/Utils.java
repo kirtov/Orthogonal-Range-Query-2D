@@ -1,4 +1,5 @@
 public class Utils {
+
     static final int binSearchByX(Point[] pts, int val, int l, int r) {
         int midVal;
         while (l < r) {
