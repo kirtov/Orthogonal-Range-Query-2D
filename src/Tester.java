@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class Tester {
-    final int POINTS_TO = 2097155;
+    final int POINTS_TO = 524289;
     final int RANGE = 200000;
     final int QUERIES = 20000;
     final double TIME_DIV = 1000000000.0;
